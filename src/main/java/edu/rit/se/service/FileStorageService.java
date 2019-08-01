@@ -1,8 +1,9 @@
-package com.example.filedemo.service;
+package edu.rit.se.service;
 
-import com.example.filedemo.exception.FileStorageException;
-import com.example.filedemo.exception.MyFileNotFoundException;
-import com.example.filedemo.property.FileStorageProperties;
+import edu.rit.se.exception.FileStorageException;
+import edu.rit.se.exception.MyFileNotFoundException;
+import edu.rit.se.property.FileStorageProperties;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -18,8 +19,8 @@ import java.nio.file.StandardCopyOption;
 
 @Service
 public class FileStorageService {
-
     private final Path fileStorageLocation;
+    private Path targetLocation;
 
     @Autowired
     public FileStorageService(FileStorageProperties fileStorageProperties) {
@@ -44,9 +45,9 @@ public class FileStorageService {
             }
 
             // Copy file to the target location (Replacing existing file with the same name)
-            Path targetLocation = this.fileStorageLocation.resolve(fileName);
+            this.targetLocation = this.fileStorageLocation.resolve(fileName);
+            
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
-
             return fileName;
         } catch (IOException ex) {
             throw new FileStorageException("Could not store file " + fileName + ". Please try again!", ex);
@@ -65,5 +66,9 @@ public class FileStorageService {
         } catch (MalformedURLException ex) {
             throw new MyFileNotFoundException("File not found " + fileName, ex);
         }
+    }
+    
+    public String getTargetLocation() {
+    	return targetLocation.normalize().toString();
     }
 }

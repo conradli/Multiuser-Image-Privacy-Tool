@@ -1,4 +1,4 @@
-package com.example.filedemo.exception;
+package edu.rit.se.exception;
 
 public class FileStorageException extends RuntimeException {
     public FileStorageException(String message) {

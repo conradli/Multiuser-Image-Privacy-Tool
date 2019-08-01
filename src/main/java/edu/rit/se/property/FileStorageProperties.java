@@ -1,4 +1,4 @@
-package com.example.filedemo.property;
+package edu.rit.se.property;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
